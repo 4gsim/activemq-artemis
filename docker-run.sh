@@ -24,11 +24,6 @@
 
 set -e
 
-BROKER_HOME=/var/lib/
-CONFIG_PATH=$BROKER_HOME/etc
-OVERRIDE_PATH=$BROKER_HOME/etc-overrides
-export BROKER_HOME OVERRIDE_PATH CONFIG_PATH
-
 if [[ ${ANONYMOUS_LOGIN,,} == "true" ]]; then
   LOGIN_OPTION="--allow-anonymous"
 else
@@ -38,12 +33,10 @@ fi
 CREATE_ARGUMENTS="--user ${ARTEMIS_USER} --password ${ARTEMIS_PASSWORD} --silent ${LOGIN_OPTION} --force ${EXTRA_ARGS}"
 
 echo CREATE_ARGUMENTS=${CREATE_ARGUMENTS}
-ls -la ./
-ls -la ./data
+
 /opt/activemq-artemis/bin/artemis create ${CREATE_ARGUMENTS} .
-ls -la ./
-ls -la ./data
-for f in $OVERRIDE_PATH/*.*
+
+for f in ./etc-overrides/*.*
 do
         [ -f "$f" ] || break
         mv -f $f ./etc
