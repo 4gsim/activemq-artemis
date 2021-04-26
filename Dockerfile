@@ -23,8 +23,8 @@ LABEL maintainer="Apache ActiveMQ Team"
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /opt
 
-ARG ARTEMIS_VERSION 2.17.0
-ARG ARTEMIS_DIST_FILE_NAME apache-artemis-$ARTEMIS_VERSION-bin.tar.gz
+ENV ARTEMIS_VERSION 2.17.0
+ENV ARTEMIS_DIST_FILE_NAME apache-artemis-$ARTEMIS_VERSION-bin.tar.gz
 ENV ARTEMIS_USER artemis
 ENV ARTEMIS_PASSWORD artemis
 ENV ANONYMOUS_LOGIN false
