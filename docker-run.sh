@@ -38,7 +38,7 @@ CREATE_ARGUMENTS="--user ${ARTEMIS_USER} --password ${ARTEMIS_PASSWORD} --silent
 
 echo CREATE_ARGUMENTS=${CREATE_ARGUMENTS}
 
-if ! [ -f ./etc/broker.xml ]; then
+if ! [ -f ./bin/artemis ]; then
     /opt/activemq-artemis/bin/artemis create ${CREATE_ARGUMENTS} .
 else
     echo "broker already created, ignoring creation"
