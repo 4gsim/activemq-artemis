@@ -42,5 +42,5 @@ do
         cp -f $f ./etc
 done
 
-
-exec ./bin/artemis "$@"
+find . \! -user artemis -exec chown artemis '{}' +
+exec gosu artemis ./bin/artemis "$@"
