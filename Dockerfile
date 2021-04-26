@@ -21,25 +21,24 @@ FROM openjdk:8
 LABEL maintainer="Apache ActiveMQ Team"
 # Make sure pipes are considered to determine success, see: https://github.com/hadolint/hadolint/wiki/DL4006
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-WORKDIR /opt
 
 ENV ARTEMIS_VERSION 2.17.0
 ENV ARTEMIS_DIST_FILE_NAME apache-artemis-$ARTEMIS_VERSION-bin.tar.gz
+ENV ARTEMIS_TMPDIR /tmp
+ENV ARTEMIS_HOME /opt/activemq-artemis
 ENV ARTEMIS_USER artemis
 ENV ARTEMIS_PASSWORD artemis
 ENV ANONYMOUS_LOGIN false
 ENV EXTRA_ARGS --http-host 0.0.0.0 --relax-jolokia
 
-# add user and group for artemis
-RUN groupadd -g 1000 -r artemis && useradd -r -u 1000 -g artemis artemis \
- && apt-get -qq -o=Dpkg::Use-Pty=0 update && \
-    apt-get -qq -o=Dpkg::Use-Pty=0 install -y libaio1 && \
-    rm -rf /var/lib/apt/lists/*
-
-USER artemis
-
-RUN curl "https://mirrors.hostingromania.ro/apache.org/activemq/activemq-artemis/$ARTEMIS_VERSION/$ARTEMIS_DIST_FILE_NAME" --output "$ARTEMIS_DIST_FILE_NAME" && \
-	tar zxf $ARTEMIS_DIST_FILE_NAME --directory /opt/activemq-artemis --strip 1
+# Install artemis and add user and group for artemis
+RUN curl "https://mirrors.hostingromania.ro/apache.org/activemq/activemq-artemis/$ARTEMIS_VERSION/$ARTEMIS_DIST_FILE_NAME" --output "$ARTEMIS_TMPDIR/$ARTEMIS_DIST_FILE_NAME" && \
+	tar zxf $ARTEMIS_TMPDIR/$ARTEMIS_DIST_FILE_NAME --directory $ARTEMIS_HOME --strip 1 && \
+	groupadd -g 1000 -r artemis && useradd -r -u 1000 -g artemis artemis && \
+	apt-get -qq -o=Dpkg::Use-Pty=0 update && \
+	apt-get -qq -o=Dpkg::Use-Pty=0 install -y libaio1 && \
+	rm -rf /var/lib/apt/lists/* && \
+	chown -R artemis:artemis $ARTEMIS_HOME
 
 # Web Server
 EXPOSE 8161 \
