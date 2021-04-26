@@ -33,6 +33,7 @@ ENV EXTRA_ARGS --http-host 0.0.0.0 --relax-jolokia
 
 # Install artemis and add user and group for artemis
 RUN curl "https://mirrors.hostingromania.ro/apache.org/activemq/activemq-artemis/$ARTEMIS_VERSION/$ARTEMIS_DIST_FILE_NAME" --output "$ARTEMIS_TMPDIR/$ARTEMIS_DIST_FILE_NAME" && \
+	mkdir $ARTEMIS_HOME && \
 	tar zxf $ARTEMIS_TMPDIR/$ARTEMIS_DIST_FILE_NAME --directory $ARTEMIS_HOME --strip 1 && \
 	groupadd -g 1000 -r artemis && useradd -r -u 1000 -g artemis artemis && \
 	apt-get -qq -o=Dpkg::Use-Pty=0 update && \
