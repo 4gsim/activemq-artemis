@@ -39,7 +39,7 @@ RUN curl "https://mirrors.hostingromania.ro/apache.org/activemq/activemq-artemis
 	apt-get -qq -o=Dpkg::Use-Pty=0 update && \
 	apt-get -qq -o=Dpkg::Use-Pty=0 install -y libaio1 && \
 	rm -rf /var/lib/apt/lists/* && \
-	chown -R artemis:artemis $ARTEMIS_HOME && \
+	chown -R artemis.artemis $ARTEMIS_HOME && \
 	mkdir /var/lib/artemis-instance && chown -R artemis.artemis /var/lib/artemis-instance
 
 COPY ./docker-run.sh /opt

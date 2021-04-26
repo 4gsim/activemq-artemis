@@ -38,9 +38,11 @@ fi
 CREATE_ARGUMENTS="--user ${ARTEMIS_USER} --password ${ARTEMIS_PASSWORD} --silent ${LOGIN_OPTION} --force ${EXTRA_ARGS}"
 
 echo CREATE_ARGUMENTS=${CREATE_ARGUMENTS}
-
+ls -la ./
+ls -la ./data
 /opt/activemq-artemis/bin/artemis create ${CREATE_ARGUMENTS} .
-
+ls -la ./
+ls -la ./data
 for f in $OVERRIDE_PATH/*.*
 do
         [ -f "$f" ] || break
