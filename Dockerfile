@@ -21,7 +21,6 @@ FROM openjdk:8
 LABEL maintainer="Apache ActiveMQ Team"
 # Make sure pipes are considered to determine success, see: https://github.com/hadolint/hadolint/wiki/DL4006
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-WORKDIR /opt
 
 ENV ARTEMIS_VERSION 2.17.0
 ENV ARTEMIS_DIST_FILE_NAME apache-artemis-$ARTEMIS_VERSION-bin.tar.gz
@@ -43,7 +42,7 @@ RUN curl "https://mirrors.hostingromania.ro/apache.org/activemq/activemq-artemis
 	chown -R artemis:artemis $ARTEMIS_HOME && \
 	mkdir /var/lib/artemis-instance && chown -R artemis.artemis /var/lib/artemis-instance
 
-COPY ./docker-run.sh /
+COPY ./docker-run.sh /opt
 
 RUN chmod +x /opt/docker-run.sh
 
@@ -68,5 +67,5 @@ EXPOSE 8161 \
 #Port for STOMP
     61613
 	
-ENTRYPOINT ["/docker-run.sh"]
+ENTRYPOINT ["/opt/docker-run.sh"]
 CMD ["run"]
