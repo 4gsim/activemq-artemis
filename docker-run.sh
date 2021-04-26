@@ -39,7 +39,7 @@ echo CREATE_ARGUMENTS=${CREATE_ARGUMENTS}
 for f in ./etc-overrides/*.*
 do
         [ -f "$f" ] || break
-        mv -f $f ./etc
+        cp -f $f ./etc
 done
 
 
