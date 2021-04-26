@@ -21,6 +21,7 @@ FROM openjdk:8
 LABEL maintainer="Apache ActiveMQ Team"
 # Make sure pipes are considered to determine success, see: https://github.com/hadolint/hadolint/wiki/DL4006
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+WORKDIR /opt
 
 ENV ARTEMIS_VERSION 2.17.0
 ENV ARTEMIS_DIST_FILE_NAME apache-artemis-$ARTEMIS_VERSION-bin.tar.gz
@@ -39,7 +40,18 @@ RUN curl "https://mirrors.hostingromania.ro/apache.org/activemq/activemq-artemis
 	apt-get -qq -o=Dpkg::Use-Pty=0 update && \
 	apt-get -qq -o=Dpkg::Use-Pty=0 install -y libaio1 && \
 	rm -rf /var/lib/apt/lists/* && \
-	chown -R artemis:artemis $ARTEMIS_HOME
+	chown -R artemis:artemis $ARTEMIS_HOME && \
+	mkdir /var/lib/artemis-instance && chown -R artemis.artemis /var/lib/artemis-instance
+
+COPY ./docker-run.sh /
+
+RUN chmod +x /opt/docker-run.sh
+
+USER artemis
+
+# Expose some outstanding folders
+VOLUME ["/var/lib/artemis-instance/etc", "/var/lib/artemis-instance/data"]
+WORKDIR /var/lib/artemis-instance
 
 # Web Server
 EXPOSE 8161 \
@@ -55,18 +67,6 @@ EXPOSE 8161 \
     1883 \
 #Port for STOMP
     61613
-
-USER root
-
-RUN mkdir /var/lib/artemis-instance && chown -R artemis.artemis /var/lib/artemis-instance
-
-COPY ./docker-run.sh /
-
-USER artemis
-
-# Expose some outstanding folders
-VOLUME ["/var/lib/artemis-instance/etc", "/var/lib/artemis-instance/data"]
-WORKDIR /var/lib/artemis-instance
-
+	
 ENTRYPOINT ["/docker-run.sh"]
 CMD ["run"]
