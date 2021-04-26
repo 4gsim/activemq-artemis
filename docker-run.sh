@@ -41,10 +41,10 @@ echo CREATE_ARGUMENTS=${CREATE_ARGUMENTS}
 
 /opt/activemq-artemis/bin/artemis create ${CREATE_ARGUMENTS} .
 
-for z in $OVERRIDE_PATH/*.*
+for f in $OVERRIDE_PATH/*.*
 do
-        [ -f "$z" ] || break
-        mv $z ./etc
+        [ -f "$f" ] || break
+        mv -f $f ./etc
 done
 
 
