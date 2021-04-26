@@ -65,7 +65,7 @@ COPY ./docker-run.sh /
 USER artemis
 
 # Expose some outstanding folders
-VOLUME ["/var/lib/artemis-instance"]
+VOLUME ["/var/lib/artemis-instance/etc", "/var/lib/artemis-instance/data"]
 WORKDIR /var/lib/artemis-instance
 
 ENTRYPOINT ["/docker-run.sh"]
