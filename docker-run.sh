@@ -26,6 +26,7 @@ set -e
 
 BROKER_HOME=/var/lib/
 CONFIG_PATH=$BROKER_HOME/etc
+OVERRIDE_PATH=$BROKER_HOME/etc-overrides
 export BROKER_HOME OVERRIDE_PATH CONFIG_PATH
 
 if [[ ${ANONYMOUS_LOGIN,,} == "true" ]]; then
@@ -34,14 +35,17 @@ else
   LOGIN_OPTION="--require-login"
 fi
 
-CREATE_ARGUMENTS="--user ${ARTEMIS_USER} --password ${ARTEMIS_PASSWORD} --silent ${LOGIN_OPTION} ${EXTRA_ARGS}"
+CREATE_ARGUMENTS="--user ${ARTEMIS_USER} --password ${ARTEMIS_PASSWORD} --silent ${LOGIN_OPTION} --force ${EXTRA_ARGS}"
 
 echo CREATE_ARGUMENTS=${CREATE_ARGUMENTS}
 
-if ! [ -f ./bin/artemis ]; then
-    /opt/activemq-artemis/bin/artemis create ${CREATE_ARGUMENTS} .
-else
-    echo "broker already created, ignoring creation"
-fi
+/opt/activemq-artemis/bin/artemis create ${CREATE_ARGUMENTS} .
+
+for z in $OVERRIDE_PATH/*.*
+do
+        [ -f "$z" ] || break
+        mv $z ./etc
+done
+
 
 exec ./bin/artemis "$@"
