@@ -6,6 +6,7 @@ activemq-artemis
 Image Tags
 ----------
 calincerchez/activemq-artemis:latest
+[`2.17.0`, `latest`](https://github.com/4gsim/activemq-artemis/blob/main/Dockerfile)
 
 How to use this image
 ---------------------
